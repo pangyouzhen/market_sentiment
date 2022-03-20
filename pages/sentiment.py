@@ -2,8 +2,8 @@ import pandas as pd
 
 import streamlit as st
 import pandas as pd
+from .utils.date_utils import trade_date
 
 def app():
-    df  = pd.read_csv("/data/project/stock/raw_data/2022-03-18.csv")
-    # img = Image.open("/data/project/stock/img/2022-03-18.png")
+    df  = pd.read_csv(f"/data/project/stock/raw_data/{trade_date}.csv")
     st.dataframe(df)

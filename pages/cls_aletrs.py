@@ -1,11 +1,9 @@
 import pandas as pd
 
 import streamlit as st
-from PIL import Image
 import pandas as pd
-
 from .utils.date_utils import trade_date
 
 def app():
-    img = Image.open(f"./data/cls_img/{trade_date}.png")
-    st.image(img)
+    df  = pd.read_csv(f"./data/stock_zh_a_alerts_cls/{trade_date}.csv",index_col=0)
+    st.dataframe(df)
