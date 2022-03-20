@@ -9,16 +9,19 @@ from pages.utils.date_utils import trade_date,today_is_trade_date
 import schedule
 # 获取数据+统计数据
 
+
+logger.add(f"logs/{trade_date}.log", rotation="1 day")
+
 class CrawlerSts():
     def __init__(self):
         self.tasks = [
             # 涨停股池
-            ak.stock_em_zt_pool,
-            ak.stock_em_zt_pool_dtgc,
-            ak.stock_em_zt_pool_zbgc,
-            ak.stock_em_zt_pool_previous,
-            ak.stock_em_zt_pool_strong,
-            ak.stock_em_zt_pool_sub_new,
+            ak.stock_zt_pool_em,
+            ak.stock_zt_pool_dtgc_em,
+            ak.stock_zt_pool_zbgc_em,
+            ak.stock_zt_pool_previous_em,
+            ak.stock_zt_pool_strong_em,
+            ak.stock_zt_pool_sub_new_em,
             ak.stock_zh_a_alerts_cls,
             ak.stock_zh_a_spot,
         ]
@@ -30,8 +33,8 @@ class CrawlerSts():
             try:
                 task_name = task.__name__
                 self.res[task_name] = task()
-                self.res[task_name].to_csv(f"./data/{task_name}/{today_str}.csv",encoding="utf-8",index=False)
-                logger.info(f"{today_str}_{task_name}运行成功")
+                self.res[task_name].to_csv(f"./data/{task_name}/{trade_date}.csv",encoding="utf-8",index=False)
+                logger.info(f"{trade_date}_{task_name}运行成功")
             except Exception as e:
                 logger.error(e)
 
@@ -60,9 +63,18 @@ class CrawlerSts():
 
     def run(self):
         if today_is_trade_date:
+            logger.info("开始爬取数据")
             self.crawler()
+            logger.info("开始统计数据")
             self.sts()
+            logger.info("统计数据结束")
+        else:
+            logger.info("今天不是交易日")
     
 
-job = CrawlerSts().run()
+job = CrawlerSts().run
 schedule.every().day.at("18:00").do(job)
+
+while True:
+    schedule.run_pending()
+    time.sleep(10)

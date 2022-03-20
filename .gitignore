@@ -7,3 +7,4 @@ pages/__pycache__/
 nohup.out
 *csv
 venv/
+logs/
