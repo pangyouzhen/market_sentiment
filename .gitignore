@@ -1,0 +1,9 @@
+.linux_env
+# Virtual environments
+env/
+sap/
+__pycache__/
+pages/__pycache__/
+nohup.out
+*csv
+venv/
