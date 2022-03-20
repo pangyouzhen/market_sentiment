@@ -1,10 +1,7 @@
 # Technology Stack 
 
-1. Python 
+1. Python3.8
 2. Streamlit 
-3. Pandas
-4. Scikit-Learn
-5. Seaborn
 
 # How to Run 
 
