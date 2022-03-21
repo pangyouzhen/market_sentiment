@@ -5,11 +5,11 @@ from typing import List
 import akshare as ak
 from loguru import logger
 
-from pages.utils.date_utils import trade_date,today_is_trade_date
+from pages.utils.date_utils import DateUtils
 import schedule
 # 获取数据+统计数据
 
-
+trade_date,today_is_trade_date = DateUtils().trade_date()
 logger.add(f"logs/{trade_date}.log", rotation="1 day")
 
 class CrawlerSts():
@@ -17,13 +17,19 @@ class CrawlerSts():
         self.tasks = [
             # 涨停股池
             ak.stock_zt_pool_em,
+            # 跌停股池
             ak.stock_zt_pool_dtgc_em,
+            # 炸板股池
             ak.stock_zt_pool_zbgc_em,
+            # 昨日涨停
             ak.stock_zt_pool_previous_em,
             ak.stock_zt_pool_strong_em,
             ak.stock_zt_pool_sub_new_em,
             ak.stock_zh_a_alerts_cls,
+            # 全部数据
             ak.stock_zh_a_spot,
+            # 赚钱效应
+            ak.stock_market_activity_legu,
         ]
         self.res = {}
 
@@ -49,14 +55,14 @@ class CrawlerSts():
 
         ## 投机情绪
         ###  跌停数目
-        dt_num = len(self.res["stock_em_zt_pool_dtgc"])
+        dt_num = len(self.res["stock_zt_pool_dtgc_em"])
 
         ### 涨停数据
-        stock_em_zt_pool_df = self.res["stock_em_zt_pool"]
+        stock_em_zt_pool_df = self.res["stock_zt_pool_em"]
         zt_num = len(stock_em_zt_pool_df)
 
         ### 炸板股票
-        stock_em_zt_pool_zbgc = self.res["stock_em_zt_pool_zbgc"]
+        stock_em_zt_pool_zbgc = self.res["stock_zt_pool_zbgc_em"]
         zhaban_num = len(stock_em_zt_pool_zbgc)
 
         ### 代表股票
@@ -73,8 +79,9 @@ class CrawlerSts():
     
 
 job = CrawlerSts().run
-schedule.every().day.at("18:00").do(job)
+schedule.every().day.at("20:14").do(job)
 
 while True:
+    print("start")
     schedule.run_pending()
     time.sleep(10)

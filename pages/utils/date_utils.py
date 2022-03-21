@@ -19,4 +19,3 @@ class DateUtils:
             ind = bisect(self.trade_list,self.input_date)
             return self.trade_list[ind-1],False
 
-trade_date,today_is_trade_date = DateUtils().trade_date()
