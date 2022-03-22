@@ -8,6 +8,8 @@ from loguru import logger
 from pages.utils.date_utils import DateUtils
 import schedule
 # 获取数据+统计数据
+from crawler_sts.cls.cls_alters_csv import ClsAltersCsv
+from crawler_sts.cls.cls_zt_img import ClsZtImg
 
 trade_date,today_is_trade_date = DateUtils().trade_date()
 logger.add(f"logs/{trade_date}.log", rotation="1 day")
@@ -25,7 +27,8 @@ class CrawlerSts():
             ak.stock_zt_pool_previous_em,
             ak.stock_zt_pool_strong_em,
             ak.stock_zt_pool_sub_new_em,
-            ak.stock_zh_a_alerts_cls,
+            # ak.stock_zh_a_alerts_cls,
+            ClsAltersCsv().get_data,
             # 全部数据
             ak.stock_zh_a_spot,
             # 赚钱效应
